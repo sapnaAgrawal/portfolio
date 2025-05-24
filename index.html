@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sapana Agrawal | 3D Portfolio</title>
+<style>
+  :root {
+    --bg: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    --text: #ffffff;
+    --card: rgba(255, 255, 255, 0.1);
+    --accent: #00d4ff;
+    --accent-glow: #ff6b35;
+    --glass: rgba(255, 255, 255, 0.08);
+    --shadow: rgba(0, 0, 0, 0.3);
+    --glow: 0 0 30px rgba(0, 212, 255, 0.3);
+    --radius: 20px;
+    --font-primary: 'Segoe UI', system-ui, sans-serif;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: var(--font-primary);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* Animated background particles */
+  .bg-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+    50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+  }
+
+  /* Navigation */
+  nav {
+    position: fixed;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    padding: 1rem 2rem;
+    z-index: 1000;
+    transition: all 0.3s ease;
+  }
+
+  nav:hover {
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: var(--glow);
+  }
+
+  nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  nav a:hover {
+    background: var(--accent);
+    color: #000;
+    box-shadow: 0 0 20px var(--accent);
+    transform: translateY(-2px);
+  }
+
+  /* Header Section */
+  .hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    perspective: 1000px;
+  }
+
+  .hero-content {
+    text-align: center;
+    z-index: 10;
+    animation: fadeInUp 1s ease-out;
+  }
+
+  .hero h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, var(--accent), var(--accent-glow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from { filter: brightness(1); }
+    to { filter: brightness(1.2); }
+  }
+
+  .hero p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+
+  .hero-3d {
+    position: absolute;
+    right: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 300px;
+    height: 300px;
+    perspective: 1000px;
+  }
+
+  .code-cube {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotateCube 15s linear infinite;
+  }
+
+  .cube-face {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, var(--glass), rgba(0, 212, 255, 0.1));
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    border-radius: var(--radius);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--accent);
+    text-shadow: 0 0 20px currentColor;
+  }
+
+  .cube-face:nth-child(1) { transform: translateZ(150px); }
+  .cube-face:nth-child(2) { transform: rotateY(180deg) translateZ(150px); }
+  .cube-face:nth-child(3) { transform: rotateY(90deg) translateZ(150px); }
+  .cube-face:nth-child(4) { transform: rotateY(-90deg) translateZ(150px); }
+  .cube-face:nth-child(5) { transform: rotateX(90deg) translateZ(150px); }
+  .cube-face:nth-child(6) { transform: rotateX(-90deg) translateZ(150px); }
+
+  @keyframes rotateCube {
+    0% { transform: rotateX(0deg) rotateY(0deg); }
+    100% { transform: rotateX(360deg) rotateY(360deg); }
+  }
+
+  /* Floating Action Buttons */
+  .fab-container {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .fab {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: var(--accent);
+    font-size: 1.5rem;
+  }
+
+  .fab:hover {
+    transform: scale(1.1);
+    background: var(--accent);
+    color: #000;
+    box-shadow: var(--glow);
+  }
+
+  /* Sections */
+  .section {
+    min-height: 100vh;
+    padding: 6rem 2rem;
+    position: relative;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-title {
+    font-size: 3rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 4rem;
+    background: linear-gradient(45deg, var(--accent), var(--accent-glow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glass morphism cards */
+  .card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+  }
+
+  .card:hover::before {
+    left: 100%;
+  }
+
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--glow);
+    border-color: var(--accent);
+  }
+
+  /* About Section */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .about-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+  }
+
+  .about-visual {
+    position: relative;
+    height: 400px;
+    perspective: 1000px;
+  }
+
+  .floating-element {
+    position: absolute;
+    background: var(--glass);
+    backdrop-filter: blur(20px);    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 15px;
+    padding: 1rem;
+    color: var(--accent);
+    font-weight: bold;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .floating-element:nth-child(1) {
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+  }
+
+  .floating-element:nth-child(2) {
+    top: 60%;
+    right: 20%;
+    animation-delay: 1s;
+  }
+
+  .floating-element:nth-child(3) {
+    bottom: 20%;
+    left: 30%;
+    animation-delay: 2s;
+  }
+
+  /* Skills Section */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+  }
+
+  .skill-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skill-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-glow));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .skill-card:hover::after {
+    transform: scaleX(1);
+  }
+
+  .skill-card:hover {
+    transform: translateY(-5px) rotateX(5deg);
+    box-shadow: var(--glow);
+  }
+
+  .skill-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--accent);
+  }
+
+  /* Projects Section */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+
+  .project-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .project-card:hover {
+    transform: scale(1.05) rotateY(5deg);
+    box-shadow: var(--glow);
+  }
+
+  .project-header {
+    background: linear-gradient(135deg, var(--accent), var(--accent-glow));
+    color: #000;
+    padding: 1.5rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  .project-content {
+    padding: 2rem;
+  }
+
+  .project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .tech-tag {
+    background: rgba(0, 212, 255, 0.2);
+    color: var(--accent);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    border: 1px solid var(--accent);
+  }
+
+  /* Contact Section */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .contact-item:hover {
+    transform: translateX(10px);
+    background: var(--accent);
+    color: #000;
+    box-shadow: var(--glow);
+  }
+
+  .contact-icon {
+    font-size: 1.5rem;
+    color: var(--accent);
+  }
+
+  .contact-item:hover .contact-icon {
+    color: #000;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2.5rem;
+    }
+    
+    .hero-3d {
+      display: none;
+    }
+    
+    .about-grid,
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    nav ul {
+      gap: 1rem;
+    }
+    
+    nav a {
+      padding: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .section {
+      padding: 4rem 1rem;
+    }
+  }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 1001;
+  }
+
+  .scroll-progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-glow));
+    width: 0%;
+    transition: width 0.1s ease;
+  }
+</style>
+</head>
+<body>
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-indicator">
+    <div class="scroll-progress" id="scrollProgress"></div>
+  </div>
+
+  <!-- Animated Background -->
+  <div class="bg-particles" id="particles"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Floating Action Buttons -->
+  <div class="fab-container">
+    <a href="https://example.com/your_resume.pdf" class="fab" target="_blank" title="Download Resume">
+      📄
+    </a>
+    <a href="mailto:sapanaagrawal7520@gmail.com" class="fab" title="Email Me">
+      ✉️
+    </a>
+    <a href="https://linkedin.com/in/agrawal-s-b47449197" class="fab" target="_blank" title="LinkedIn">
+      💼
+    </a>
+  </div>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>Sapana Agrawal</h1>
+      <p>Software Developer | ASP.NET Core | SQL | Web API | React</p>
+      <p>Crafting scalable solutions with passion and precision</p>
+    </div>
+    
+    <div class="hero-3d">
+      <div class="code-cube">
+        <div class="cube-face">{"<>"}</div>
+        <div class="cube-face">{"{ }"}</div>
+        <div class="cube-face">{"()=>"}</div>
+        <div class="cube-face">{"&&"}</div>
+        <div class="cube-face">{"JS"}</div>
+        <div class="cube-face">{"C#"}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2 class="section-title">About Me</h2>
+      <div class="about-grid">
+        <div class="about-text card">
+          <p>I'm a passionate .NET Developer with 3+ years of experience building scalable web applications, robust backend APIs, and comprehensive reporting solutions. My expertise spans across ASP.NET Core, MVC, SQL Server, Entity Framework, and modern frontend technologies like React.</p>
+          <p>I thrive on solving complex problems, collaborating with teams, and delivering client-focused solutions that make a real impact. My approach combines technical excellence with creative problem-solving to build applications that not only work flawlessly but exceed expectations.</p>
+        </div>
+        <div class="about-visual">
+          <div class="floating-element">.NET Core</div>
+          <div class="floating-element">React.js</div>
+          <div class="floating-element">SQL Server</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills" class="section">
+    <div class="container">
+      <h2 class="section-title">Skills & Technologies</h2>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-icon">⚡</div>
+          <h3>ASP.NET Core</h3>
+          <p>Building robust web applications and APIs</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🗄️</div>
+          <h3>SQL Server</h3>
+          <p>Database design and optimization</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🔧</div>
+          <h3>Entity Framework</h3>
+          <p>ORM and data access patterns</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🌐</div>
+          <h3>Web API</h3>
+          <p>RESTful services and integration</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">⚛️</div>
+          <h3>React.js</h3>
+          <p>Modern frontend development</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">📊</div>
+          <h3>Reporting</h3>
+          <p>PDF and Excel report generation</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="section">
+    <div class="container">
+      <h2 class="section-title">Featured Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-header">Full-Stack Portfolio Application</div>
+          <div class="project-content">
+            <p>A comprehensive portfolio website built with React.js frontend and .NET Core backend, featuring responsive design and modern UI/UX principles.</p>
+            <div class="project-tech">
+              <span class="tech-tag">React.js</span>
+              <span class="tech-tag">.NET Core</span>
+              <span class="tech-tag">CSS3</span>
+              <span class="tech-tag">HTML5</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="project-card">
+          <div class="project-header">Advanced Reporting System</div>
+          <div class="project-content">
+            <p>Developed a comprehensive PDF and Excel report generator using ASP.NET Core, enabling dynamic data visualization and export capabilities.</p>
+            <div class="project-tech">
+              <span class="tech-tag">ASP.NET Core</span>
+              <span class="tech-tag">C#</span>
+              <span class="tech-tag">PDF Generation</span>
+              <span class="tech-tag">Excel</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="project-card">
+          <div class="project-header">Enterprise Web API</div>
+          <div class="project-content">
+            <p>Built scalable Web API solutions using Entity Framework and SQL Server, implementing robust data access patterns and business logic layers.</p>
+            <div class="project-tech">
+              <span class="tech-tag">Web API</span>
+              <span class="tech-tag">Entity Framework</span>
+              <span class="tech-tag">SQL Server</span>
+              <span class="tech-tag">RESTful</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section">
+    <div class="container">
+      <h2 class="section-title">Let's Connect</h2>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <a href="mailto:sapanaagrawal7520@gmail.com" class="contact-item">
+            <span class="contact-icon">📧</span>
+            <div>
+              <h3>Email</h3>
+              <p>sapanaagrawal7520@gmail.com</p>
+            </div>
+          </a>
+          
+          <a href="https://linkedin.com/in/agrawal-s-b47449197" class="contact-item" target="_blank">
+            <span class="contact-icon">💼</span>
+            <div>
+              <h3>LinkedIn</h3>
+              <p>Professional Network</p>
+            </div>
+          </a>
+          
+          <div class="contact-item">
+            <span class="contact-icon">🌍</span>
+            <div>
+              <h3>Location</h3>
+              <p>Available for Remote Work</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h3>Ready to collaborate?</h3>
+          <p>I'm always excited to work on new projects and challenges. Whether you need a full-stack developer, backend specialist, or someone to bring your ideas to life, let's discuss how we can work together to create something amazing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Create animated background particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('nav a').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      });
+    });
+
+    // Scroll progress indicator
+    function updateScrollProgress() {
+      const scrollProgress = document.getElementById('scrollProgress');
+      const scrollTop = window.pageYOffset;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      scrollProgress.style.width = scrollPercent + '%';
+    }
+
+    // Intersection Observer for fade-in animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in');
+        }
+      });
+    }, observerOptions);
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      createParticles();
+      
+      // Observe sections for animations
+      document.querySelectorAll('.section').forEach(section => {
+        observer.observe(section);
+      });
+      
+      // Observe cards
+      document.querySelectorAll('.card, .skill-card, .project-card').forEach(card => {
+        observer.observe(card);
+      });
+    });
+
+    // Update scroll progress on scroll
+    window.addEventListener('scroll', updateScrollProgress);
+
+    // Add hover effects to skill cards
+    document.querySelectorAll('.skill-card').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-10px) rotateX(10deg) rotateY(5deg)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
+      });
+    });
+
+    // Add click effect to project cards
+    document.querySelectorAll('.project-card').forEach(card => {
+      card.addEventListener('click', function() {
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          this.style.transform = 'scale(1.05) rotateY(5deg)';
+        }, 150);
+      });
+    });
+  </script>
+</body>
+</html>
