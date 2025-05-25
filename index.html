@@ -122,7 +122,6 @@
             justify-content: center;
             position: relative;
             perspective: 1000px;
-
         }
 
         .hero-content {
@@ -382,38 +381,64 @@
         .about-visual {
             position: relative;
             height: 400px;
-            perspective: 1000px;
+            perspective: 100px;
+        }
+
+        .about-visual {
+            position: relative;
+            height: 400px; /* or set to fit your section */
+            overflow: hidden;
         }
 
         .floating-element {
             position: absolute;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 15px;
-            padding: 1rem;
-            color: var(--accent);
-            font-weight: bold;
-            animation: float 3s ease-in-out infinite;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 0.8rem 1.5rem;
+            color: #00d4ff;
+            font-weight: 600;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            animation: float 6s ease-in-out infinite;
+            transition: transform 0.3s ease;
+            font-family: 'Segoe UI', sans-serif;
+            white-space: nowrap;
         }
 
+            .floating-element:hover {
+                transform: scale(1.05);
+            }
+
             .floating-element:nth-child(1) {
-                top: 10%;
-                left: 10%;
+                top: 15%;
+                left: 15%;
                 animation-delay: 0s;
             }
 
             .floating-element:nth-child(2) {
-                top: 60%;
-                right: 20%;
+                top: 50%;
+                right: 15%;
                 animation-delay: 1s;
             }
 
             .floating-element:nth-child(3) {
                 bottom: 20%;
-                left: 30%;
+                left: 40%;
                 animation-delay: 2s;
             }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
 
         /* Skills Section */
         .skills-grid {
@@ -753,19 +778,22 @@
     </section>
 
     <!-- About Section -->
+    <!-- About Section -->
     <section id="about" class="section">
         <div class="container">
             <h2 class="section-title">About Me</h2>
             <div class="about-grid">
+
                 <div class="about-text card">
-                    <p>I'm a passionate .NET Developer with 3+ years of experience building scalable web applications, robust backend APIs, and comprehensive reporting solutions. My expertise spans across ASP.NET Core, MVC, SQL Server, Entity Framework, and modern frontend technologies like React.</p>
-                    <p>I thrive on solving complex problems, collaborating with teams, and delivering client-focused solutions that make a real impact. My approach combines technical excellence with creative problem-solving to build applications that not only work flawlessly but exceed expectations.</p>
+                    <p><span id="typing-text"></span></p>
                 </div>
+
                 <div class="about-visual">
                     <div class="floating-element">.NET Core</div>
                     <div class="floating-element">React.js</div>
                     <div class="floating-element">SQL Server</div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -1135,6 +1163,23 @@
             });
         });
     </script>
+    <script>
+        const typingText = document.getElementById("typing-text");
+        const fullText = "I'm a passionate .NET Developer with 3+ years of experience building scalable web applications, robust backend APIs, and comprehensive reporting solutions. I thrive on solving complex problems, collaborating with teams, and delivering client-focused solutions that make a real impact.";
+
+        let index = 0;
+
+        function typeEffect() {
+            if (index < fullText.length) {
+                typingText.textContent += fullText.charAt(index);
+                index++;
+                setTimeout(typeEffect, 40); // Typing speed in ms
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", typeEffect);
+    </script>
+
 </body>
 
 </html>
